@@ -6,7 +6,6 @@ import urllib2
 import re
 import xml.etree.ElementTree as ET
 from bs4 import BeautifulSoup
-#from array import *
 
 '''
   create url
@@ -20,19 +19,9 @@ def createUrl(date, managerId, portfolioType):
   year=dateTmp[0]
 
   host = "http://www.aafm.cl/estadisticas_publico/valor_cuota_diaria.php?"
-
   argumentUrl = 'administradora=%s&tipo=%s&dia=%s&mes=%s&anio=%s&orden=1&inversion=%%' % (managerId,portfolioType,day,month,year)
-
-  '''
-  administradora=&tipo=4&dia=24&dia2=&mes=10&mes2=&anio=2013&anio2=&orden=1&inversion=%
-
-  '''
-
   url=host + argumentUrl
-
-
-  print "fetching url: "
-  print url
+  print "fetching url: [%s]" % url
 
   return url
 
@@ -52,8 +41,6 @@ def downloadFile(url):
         data.append(tmp)
       except BaseException, e:
         print "Error in row number " + str(i)
-
-  print "getting " + str(len(data))
   return data
 
 '''
@@ -75,11 +62,10 @@ def cleanData(string):
 '''
 def getCuotas(date, managerId, maxType):
   data = []
-  for rangeNumber in range(int(maxType)):
+  for rangeNumber in range(1, int(maxType)):
     urlFile = createUrl(date, managerId, rangeNumber)
     data += downloadFile(urlFile)
 
-  print "total "+ str(len(data))
   return data
 
 def storeData(data):
@@ -87,9 +73,7 @@ def storeData(data):
 
 def getInfo(dataFM, date, maxType):
   for managerId, fmNames in dataFM.items():
-
     rawData = getCuotas(date, managerId, maxType)
-    print fmNames
     print findFM(rawData, fmNames)
 
 '''
@@ -111,23 +95,18 @@ def loadFMInfo():
 
 def findFM(data, fmNames):
   result = []
-  print data
+  print "** Searching for"
+  print fmNames
   for name in fmNames:
     for row in data:
-      #print "searching "+ name + " in " + row['name']
-      regex = re.compile(r'%s'%row['name'])
-      if regex.match(name):
+      if re.match(row['name'],name):
         result.append(row)
 
   return result
-   
-#regex    <!--<fm_name>GESTION FLEXIBLE SERIE CLASICA</fm_name>-->    
+
 if __name__ == '__main__':
   date = sys.argv[1]
   maxType = 10
   dataFM = loadFMInfo()
   getInfo(dataFM, date, maxType)
-  #data = getCuotas(date,managerId, maxType)
-  #print data[3]
-  #print findFM(data, nameFM)
 
