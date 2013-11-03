@@ -1,4 +1,4 @@
 fondosMutuosData
 ================
 
-get information from "fondos mutuos"
+get daily quote value for specific "fondos mutuos" using http://www.aafm.cl/
