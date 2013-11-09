@@ -16,8 +16,8 @@ def createUrl(date, managerId, portfolioType):
 
   dateTmp = date.split("-")
 
-  day=dateTmp[2]
-  month=dateTmp[1]
+  day=int(dateTmp[2])
+  month=int(dateTmp[1])
   year=dateTmp[0]
 
   host = "http://www.aafm.cl/estadisticas_publico/valor_cuota_diaria.php?"
@@ -75,15 +75,12 @@ def getCuotas(date, managerId, maxType):
 store data on mongo database
 '''
 def storeData(data):
-  
   try :
-    MONGODB_URI = 'mongodb://USUARIO:PASSWORD@HOST:PORT/DB'
+    MONGODB_URI = 'mongodb://fondosMutuos:fondosMutuos1234@<HOST>:<PORT>/fondos_mutuos'
     client = pymongo.MongoClient(MONGODB_URI)
     db = client.get_default_database()
     db['dailyValues'].insert(data)
-  except BaseException, e:
-    print "Error "+e
-
+  except Exception, e: print e
 
 
 
@@ -139,5 +136,8 @@ if __name__ == '__main__':
   maxType = 10
   dataFM = loadFMInfo()
   dataParsed = getInfo(dataFM, date, maxType)
-  storeData(dataParsed)
+  if len(dataParsed) > 0:
+    storeData(dataParsed)
+  else:
+    print "Nothing to save"
 
