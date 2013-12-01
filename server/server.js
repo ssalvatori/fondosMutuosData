@@ -1,8 +1,6 @@
 var restify = require('restify');
 var mongoose = require('mongoose');
 
-var mongoConfig = 'mongodb://fondosMutuos:fondosMutuos1234@host:port/fondos_mutuos';
-
 console.log("SERVER: starting..");
 var server = restify.createServer({
 	"name" : "fondosMutuos",
@@ -39,7 +37,7 @@ server.use(function authenticate(req, res, next) {
         next();
 });
 
-mongoose.connect(mongoConfig, function(err, res) {
+mongoose.connect(process.env.MONGO_DEV_URI, function(err, res) {
 	if(err) {
 		console.log("Error connecting to mongo server");
 		process.exit(1);
