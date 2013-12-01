@@ -4,14 +4,15 @@
   "description": "Server for fondosMutuos",
   "main": "server.js",
   "engines" : { 
-      "node" : "0.8",
-      "npm" : ">=1.1"
+      "node" : "1.0",
+      "npm" : ">=1.0"
   },
   "repository": "https://github.com/ssalvatori/fondosMutuosData.git",
   "author": "Stefano Salvatori",
   "dependencies": {
-    "mongoose": "3.8.1"
+    "mongoose": "3.8.1",
+    "restify" : "latest"
   },
-  "changelog" : [{"0.0.0": "Initial release"},],
+  "changelog" : [{"0.0.0": "Initial release"}],
   "homepage" : "https://github.com/ssalvatori/fondosMutuosData"
 }
