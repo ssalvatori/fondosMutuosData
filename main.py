@@ -1,7 +1,6 @@
 #!/usr/bin/python
 
 import sys
-import urllib
 import urllib2
 import httplib2
 import re
