@@ -3,7 +3,9 @@
 import sys
 import urllib
 import urllib2
+import httplib2
 import re
+import json
 import xml.etree.ElementTree as ET
 from bs4 import BeautifulSoup
 from datetime import datetime
@@ -33,7 +35,6 @@ def downloadFile(url):
   data = []
   page = urllib2.urlopen(url)
   soup = BeautifulSoup(page)
-  print soup
   r = soup.find(name="table", attrs={"bordercolor":"#c0c0c0", "cellspacing": "1", "cellpadding": "0", "width": "100%", "border": "0"}).tbody.find_all('tr')
   for i in range(1, len(r)):
     row = r[i].find_all('td')
@@ -76,18 +77,17 @@ store data to server
 '''
 def storeData(data):
   try :
-    url = "http://localhost:8080/fondosMutuos/record/save";
+    url = "http://192.168.33.10:8080/fondosMutuos/record/save"
     headers = { 'Content-Type' : 'application/json' }
-    data = json.dumps(data)
-    print data
-    req = urllib2.Request(url, data, {'Content-Type': 'application/json'})
-    f = urllib2.urlopen(req)
-    response = f.read()
-    print response
-    f.close()
+    h = httplib2.Http(".cache")
+    h.add_credentials('test', 'test')
+    for objBody in data:
+      objBody = json.dumps(objBody)
+      resp, content = h.request(url, "POST", body=objBody, headers=headers)
+      if(resp.status != 200):
+        print "!!ERROR!!"
+      print content
   except Exception, e: print e
-
-
 
 '''
   get info from asociacion de fondos mutuos
