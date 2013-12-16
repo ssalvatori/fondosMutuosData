@@ -6,6 +6,7 @@ import httplib2
 import re
 import json
 import xml.etree.ElementTree as ET
+import os
 from bs4 import BeautifulSoup
 from datetime import datetime
 
@@ -76,7 +77,7 @@ store data to server
 '''
 def storeData(data):
   try :
-    url = "http://192.168.33.10:8080/fondosMutuos/record/save"
+    url = os.environ["FONDOSMUTUOS_ENDPOINT_SAVE"] or 'http://localhost:8080/fondosMutuos/record/save';
     headers = { 'Content-Type' : 'application/json' }
     h = httplib2.Http(".cache")
     h.add_credentials('test', 'test')
