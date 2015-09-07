@@ -13,16 +13,19 @@ from datetime import datetime
 '''
   create url
 '''
-def createUrl(date, managerId, portfolioType):
+def createUrl(date):
 
+'''
   dateTmp = date.split("-")
-
   day=int(dateTmp[2])
   month=int(dateTmp[1])
   year=dateTmp[0]
+'''
 
-  host = "http://www.aafm.cl/estadisticas_publico/valor_cuota_diaria.php?"
-  argumentUrl = 'administradora=%s&tipo=%s&dia=%s&mes=%s&anio=%s&orden=1&inversion=%%' % (managerId,portfolioType,day,month,year)
+  date_object = datetime.strptime(date,"%Y-%m-%d")
+
+  host = "http://www.aafm.cl/estadisticas_publico/valor_cuota_diaria_excel.php?"
+  argumentUrl = 'administradora=%&tipo=%&dia=%s&mes=%s&anio=%s&orden=1&inversion=%' % (date_object.year,date_object.month, date_object.day)
   url=host + argumentUrl
   print "fetching url: [%s]" % url
 
@@ -47,7 +50,7 @@ def downloadFile(url):
   return data
 
 '''
-table bordercolor=#c0c0c0 cellspacing=1 cellpadding=0 
+table bordercolor=#c0c0c0 cellspacing=1 cellpadding=0
             width=100% border=0
 '''
 
@@ -130,7 +133,7 @@ def findFM(data, fmNames, dateObtain):
         row['price'] = row['price'].replace('.','')
         row['price'] = float(row['price'].replace(',','.'))
         row['priceDate'] = dateCreate
-#        row['obtain'] = dateObtain 
+#        row['obtain'] = dateObtain
         result.append(row)
 
   return result
@@ -145,4 +148,3 @@ if __name__ == '__main__':
     storeData(dataParsed)
   else:
     print "Nothing to save"
-
